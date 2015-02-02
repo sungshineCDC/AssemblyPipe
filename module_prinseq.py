@@ -14,3 +14,5 @@ def modulePrinseq(file):
 
 for file in paths:
     modulePrinseq(file)
+
+s

@@ -1,17 +1,16 @@
 __author__ = 'sungshine'
 #!/usr/bin/python3
-#Run FastQC on raw reads
+#Invokes fastqc on raw read files passing in the files in as an argument
 
 import os
 import sys
 import subprocess
 
-inputDirectory = "/home/biol8803b/data"
+inputDirectory = sys.argv[1]    #/home/biol8803b/tmp
+outputDirectory = sys.argv[2]   #/home/biol8803b/fastQCresults
 paths = [os.path.join(inputDirectory,fn) for fn in next(os.walk(inputDirectory))[2]]
 
-#Invokes fastqc on raw read files passing in the files in as an argument
-def moduleFastQC(file):
-    subprocess.call(['fastqc', file])
+def moduleFastQC(file, outputDirectory):
+    subprocess.call(['fastqc', "-o", outputDirectory, file,])
 
-for file in paths:
-    moduleFastQC(file)
+# moduleFastQC(file, outputDirectory)

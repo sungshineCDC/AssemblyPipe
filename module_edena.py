@@ -38,7 +38,16 @@ def moduleedenaSE(file):
     subprocess.call(["edena", "-e", fileOutputDirectory+"/out.ovl", "-p", fileOutputDirectory+"/"])
 
 def moduleedenaPE(inputfileone, inputfiletwo):
-    subprocess.call(["spades.py", "--careful", "-1", inputfileone, "-2", inputfiletwo, "-o", outputDirectory])
+    print inputfileone
+    print inputfiletwo
+    base = os.path.basename(inputfileone)
+    filename = os.path.splitext(base)[0]
+    fileOutputDirectory = outputDirectory+str(filename)
+    subprocess.call(["mkdir", fileOutputDirectory])
+    subprocess.call(["edena", "-DRpairs", inputfileone, inputfiletwo, "-p", fileOutputDirectory+"/out"])
+    subprocess.call(["edena", "-e", fileOutputDirectory+"/out.ovl", "-p", fileOutputDirectory+"/"])
 
-for file in paths[:2]:
-    moduleedenaSE(file)
+#for file in paths[:2]:
+ #   moduleedenaSE(file)
+
+moduleedenaPE(paths[2], paths[3])

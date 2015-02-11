@@ -5,6 +5,7 @@ __author__ = 'sungshine'
 import os
 import sys
 import subprocess
+import re
 
 #Generates a hashmap of 'key : value' pairs.
 def wranglePairedEnds(paths):
@@ -56,12 +57,17 @@ def moduleSpadesPE(inputfileOne, inputfileTwo):
 
 inputDirectory = sys.argv[1]    #/home/biol8803b/data
 outputDirectory = sys.argv[2]   #/home/biol8803b/assemblyMagicResults/preProcessed
+ODspades = "/home/sim8/assemblyMagicResults/spades/"
+ODabyss = "/home/sim8/assemblyMagicResults/abyss/"
+ODedena = "/home/sim8/assemblyMagicResults/edena/"
+ODcisa = "/home/sim8/assemblyMagicResults/cisa/"
 inputfileOne = ""
 inputfileTwo = ""
 paths = [os.path.join(inputDirectory,fn) for fn in next(os.walk(inputDirectory))[2]]
 prinseqPaths = [os.path.join(outputDirectory,fn) for fn in next(os.walk(outputDirectory))[2]]
 
 fileHash = {}
+assemblyHash ={}
 
 makeOutDirectory(outputDirectory)
 preProcess(paths)
@@ -79,5 +85,3 @@ for key in fileHash:
         inputfileOne = currentValue[0]
         inputfileTwo = currentValue[1]
         moduleSpadesPE(inputfileOne, inputfileTwo)
-
-#

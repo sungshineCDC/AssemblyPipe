@@ -1,4 +1,4 @@
-__author__ = 'sungshine '
+__author__ = 'sungshine'
 #!/usr/bin/python3
 #Generates a hashmap of 'key : value' pairs where the file names are the keys and the values are the corresponding paths to single-end reads or paired end reads.
 

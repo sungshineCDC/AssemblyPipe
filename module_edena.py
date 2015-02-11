@@ -1,4 +1,4 @@
-__author__ = 'sungshine'
+__author__ = 'mcdy143'
 #!/usr/bin/python3
 
 import os
@@ -24,12 +24,12 @@ def wranglePairedEnds(paths):
             fileHash[newfile].append(file)
     return
 
-def moduleSpadesSE(file):
+def moduleedenaSE(file):
     base = os.path.basename(file)
     filename = os.path.splitext(base)[0]
     subprocess.call(["spades.py", "--careful", "-s", file, "-o", outputDirectory+filename+".spades",])
 
-def moduleSpadesPE(inputfileone, inputfiletwo):
+def moduleedenaPE(inputfileone, inputfiletwo):
     subprocess.call(["spades.py", "--careful", "-1", inputfileone, "-2", inputfiletwo, "-o", outputDirectory+ ])
 
 for file in paths:

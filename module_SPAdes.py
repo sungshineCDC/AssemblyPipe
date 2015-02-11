@@ -24,13 +24,15 @@ def wranglePairedEnds(paths):
             fileHash[newfile].append(file)
     return
 
-def moduleSpadesSE(file):
-    base = os.path.basename(file)
+def moduleSpadesSE(inputfileOne):
+    base = os.path.basename(inputfileOne)
     filename = os.path.splitext(base)[0]
-    subprocess.call(["spades.py", "--careful", "-s", file, "-o", outputDirectory+filename+".spades",])
+    subprocess.call(["spades.py", "--careful", "-s", inputfileOne, "-o", outputDirectory+filename+".spades",])
 
-def moduleSpadesPE(inputfileone, inputfiletwo):
-    subprocess.call(["spades.py", "--careful", "-1", inputfileone, "-2", inputfiletwo, "-o", outputDirectory+ ])
+def moduleSpadesPE(inputfileOne, inputfileTwo):
+    base = os.path.basename(inputfileOne)
+    filename = os.path.splitext(base)[0]
+    subprocess.call(["spades.py", "--careful", "-1", inputfileOne, "-2", inputfileTwo, "-o", outputDirectory+filename".spades",])
 
 for file in paths:
 

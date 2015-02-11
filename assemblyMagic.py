@@ -6,12 +6,6 @@ import os
 import sys
 import subprocess
 
-inputDirectory = sys.argv[1]    #/home/biol8803b/data
-outputDirectory = sys.argv[2]   #/home/biol8803b/preProcessed
-paths = [os.path.join(inputDirectory,fn) for fn in next(os.walk(inputDirectory))[2]]
-
-fileHash = {}
-
 #Generates a hashmap of 'key : value' pairs.
 def wranglePairedEnds(paths):
     for file in paths:
@@ -45,21 +39,43 @@ def preProcess(paths):
         moduleFastQC(file)
         modulePrinseq(file)
 
+#Invokes SPAdes on single-end reads or paired-end reads
+def moduleSpadesSE(inputfileOne):
+    base = os.path.basename(inputfileOne)
+    filename = os.path.splitext(base)[0]
+    subprocess.call(["spades.py", "--careful", "-s", inputfileOne, "-o", outputDirectory+filename+".spades",])
 
-####################################################################
-###                         MAIN PROGRAM                         ###
-####################################################################
+def moduleSpadesPE(inputfileOne, inputfileTwo):
+    base = os.path.basename(inputfileOne)
+    filename = os.path.splitext(base)[0]
+    subprocess.call(["spades.py", "--careful", "-1", inputfileOne, "-2", inputfileTwo, "-o", outputDirectory+filename".spades",])
+
+########################################################################################################################
+###                                                   MAIN PROGRAM                                                   ###
+########################################################################################################################
+
+inputDirectory = sys.argv[1]    #/home/biol8803b/data
+outputDirectory = sys.argv[2]   #/home/biol8803b/assemblyMagicResults/preProcessed
+inputfileOne = ""
+inputfileTwo = ""
+paths = [os.path.join(inputDirectory,fn) for fn in next(os.walk(inputDirectory))[2]]
+prinseqPaths = [os.path.join(outputDirectory,fn) for fn in next(os.walk(outputDirectory))[2]]
+
+fileHash = {}
 
 makeOutDirectory(outputDirectory)
 preProcess(paths)
-wranglePairedEnds(paths)
+wranglePairedEnds(prinseqPaths)
 
-# for keys in fileHash:
-#
-#     if fileHash.values() == 2
-#
-#         invoke moduleSPAdes with paired-end flags
-#
-#     elif fileHash.values() == 1
-#
-#         invoke moduleSPAdes with single-end flags
+for key in fileHash:
+
+    currentValue = fileHash.get(key)
+
+    if len(currentValue) == 1:
+        inputfileOne = currentValue[0]
+        moduleSpadesSE(inputfileOne)
+
+    if len(currentValue) == 2:
+        inputfileOne = currentValue[0]
+        inputfileTwo = currentValue[1]
+        moduleSpadesPE(inputfileOne, inputfileTwo)

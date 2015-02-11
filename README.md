@@ -1,4 +1,4 @@
-#AssemblyPipe
+#AssemblyPipe 
 
 Usage:  assemblyMagic.py /path/to/inputDirectory /path/to/outputDirectory
 

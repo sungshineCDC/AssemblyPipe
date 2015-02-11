@@ -16,4 +16,4 @@ def moduleAbyssSE(file):
 def moduleAbyssPE(inputfileone, inputfiletwo):
 	base = re.match("^(.*)_", file)
 	filename = base.group(1)
-	subprocess.call(["abyss-pe"], "k=21", "name=", filename, "in=", inputDirectory + inputfileone, inputDirectory + inputfiletwo]
+	subprocess.call(["abyss-pe"], "k=21", "name=", ODabyss + filename + ".fa", "in=", inputDirectory + inputfileone, inputDirectory + inputfiletwo]

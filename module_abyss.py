@@ -11,7 +11,7 @@ paths = [os.path.join(inputDirectory,fn) for fn in next(os.walk(inputDirectory))
 def moduleAbyssSE(file):
 	base = re.match("^(.*)_", file)
 	filename = base.group(1)
-	subprocess.call(["ABYSS.py", "-k 21", inputDirectory + file, "-o", outputDirectory + filename + ".fa"])
+	subprocess.call(["ABYSS.py", "-k 21", inputDirectory + file, "-o", ODabyss + filename + ".fa"])
 
 def moduleAbyssPE(inputfileone, inputfiletwo):
 	base = re.match("^(.*)_", file)

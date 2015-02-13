@@ -51,12 +51,42 @@ def moduleSpadesPE(inputfileOne, inputfileTwo):
     filename = os.path.splitext(base)[0]
     subprocess.call(["spades.py", "--careful", "-1", inputfileOne, "-2", inputfileTwo, "-o", outputDirectory+filename".spades",])
 
+#abyss single-end read function
+def moduleAbyssSE(inputfileOne):
+	base = re.match("^(.*)_", inputfileOne)
+	filename = base.group(1)
+	subprocess.call(["ABYSS", "-k 21", inputDirectory + file, "-o", ODabyss + filename + ".fa"])
+
+#abyss paired-end read function (not sure if output directory is working atm)
+def moduleAbyssPE(inputfileOne, inputfileTwo):
+	base = re.match("^(.*)_", inputfileOne)
+	filename = base.group(1)
+	subprocess.call(["abyss-pe"], "k=21", "name=", ODabyss + filename + ".fa", "in=", inputDirectory + inputfileone, inputDirectory + inputfiletwo]
+
+
 ########################################################################################################################
 ###                                                   MAIN PROGRAM                                                   ###
 ########################################################################################################################
 
-inputDirectory = sys.argv[1]    #/home/biol8803b/data
-outputDirectory = sys.argv[2]   #/home/biol8803b/assemblyMagicResults/preProcessed
+inputDirectory = '' #/home/biol8803b/data
+outputDirectory = ''   #/home/biol8803b/assemblyMagicResults/preProcessed
+
+#parse command line options
+try:
+    opts, args = getopt.getopt(argv, "hi:o:")
+except getopt.GetoptError:
+    print 'usage: ./assemblyMagic.py -i <Raw reads Directory> -o <output Directory>\n'
+    sys.exit()
+for opt, arg in opts:
+    if opt == '-h':
+        print 'usage: ./assemblyMagic.py -i <Raw reads Directory> -o <output Directory>\n'
+        sys.exit()
+    elif opt in ('-i'):
+        inputDirectory = arg
+    elif opt in ('-o'):
+        outputDirectory = arg
+
+#Output directories for respective assembler
 ODspades = "/home/sim8/assemblyMagicResults/spades/"
 ODabyss = "/home/sim8/assemblyMagicResults/abyss/"
 ODedena = "/home/sim8/assemblyMagicResults/edena/"
@@ -76,12 +106,18 @@ wranglePairedEnds(prinseqPaths)
 for key in fileHash:
 
     currentValue = fileHash.get(key)
-
+    
+    #call assemblers to execute single-end read
     if len(currentValue) == 1:
         inputfileOne = currentValue[0]
+        
         moduleSpadesSE(inputfileOne)
-
+        moduleAbyssSE(inputfileone)
+    
+    #execute paired-end reads
     if len(currentValue) == 2:
         inputfileOne = currentValue[0]
         inputfileTwo = currentValue[1]
+        
         moduleSpadesPE(inputfileOne, inputfileTwo)
+        moduleAbyssPE(inputfileOne, inputfileTwo)

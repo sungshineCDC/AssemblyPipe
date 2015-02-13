@@ -1,6 +1,6 @@
 #AssemblyPipe 
 
-Usage:  assemblyMagic.py /path/to/inputDirectory /path/to/outputDirectory
+Usage:  assemblyMagic.py -i /path/to/inputDirectory -o /path/to/outputDirectory
 
 Variables:  inputDirectory  - is the directory containing raw read files in fastq format (gziped is acceptable)
             outputDirectory - is the path to the output directory where all the program outputs will be placed

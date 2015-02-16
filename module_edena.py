@@ -6,32 +6,37 @@ import subprocess
 
 def wranglePairedEnds(paths):
     for file in paths:
+        print file
         newfile = ""
         if "R1" in file:
             newfile = file.replace("R1", "R*")
+            print "newFile, R1 --", newfile
         elif "R2" in file:
             newfile = file.replace("R2", "R*")
+            print "newFile, R2 --", newfile
         if not newfile in fileHash:
+            print "newFile, notin --", newfile
             fileHash[newfile] = [file]
         else:
+            print "already in newfile --", newfile
             fileHash[newfile].append(file)
     return
 
 def moduleedenaSE(inputfileOne):
     base = os.path.basename(inputfileOne)
-    filename = os.path.splitext(base)[1]
+    filename = os.path.splitext(base)[0]
     fileOutputDirectory = ODedena+str(filename)
     subprocess.call(["mkdir", fileOutputDirectory])
     subprocess.call(["edena", "-r", inputfileOne, "-p", fileOutputDirectory+"/out"])
-    subprocess.call(["edena", "-e", fileOutputDirectory+"/out.ovl", "-p", fileOutputDirectory+".edena"])
+    subprocess.call(["edena", "-e", fileOutputDirectory+"/out.ovl", "-p", fileOutputDirectory+"/"])
 
 def moduleedenaPE(inputfileOne, inputfileTwo):
-    base = os.path.basename(inputfileone)
-    filename = os.path.splitext(base)[1]
+    base = os.path.basename(inputfileOne)
+    filename = os.path.splitext(base)[0]
     fileOutputDirectory = ODedena+str(filename)
     subprocess.call(["mkdir", fileOutputDirectory])
     subprocess.call(["edena", "-DRpairs", inputfileOne, inputfileTwo, "-p", fileOutputDirectory+"/out"])
-    subprocess.call(["edena", "-e", fileOutputDirectory+"/out.ovl", "-p", fileOutputDirectory+".edena"])
+    subprocess.call(["edena", "-e", fileOutputDirectory+"/out.ovl", "-p", fileOutputDirectory+"/"])
 
 ########################################################################################################################
 
@@ -68,6 +73,4 @@ for key in fileHash:
     if len(sortedValues) == 2:
         inputfileOne = sortedValues[0]
         inputfileTwo = sortedValues[1]
-        moduleedenaSE(inputfileOne)
-
-#This code is working
+        moduleedenaPE(inputfileOne, inputfileTwo)

@@ -108,7 +108,7 @@ outputDirectory = "/home/biol8803b/assemblyMagicResults/"
 
 #Output directories for respective assembler
 ODerrors = "/home/sim8/assemblyMagicResults/errors/"
-ODprinseq = "home/sim8/assemblyMagicResults/prinseq/"
+ODprinseq = "/home/sim8/assemblyMagicResults/prinseq/"
 ODfastqc = "/home/sim8/assemblyMagicResults/fastqc/"
 ODspades = "/home/sim8/assemblyMagicResults/spades/"
 ODabyss = "/home/sim8/assemblyMagicResults/abyss/"
@@ -118,8 +118,10 @@ ODcisa = "/home/sim8/assemblyMagicResults/cisa/"
 inputfileOne = ""
 inputfileTwo = ""
 
+'''
 paths = [os.path.join(inputDirectory,fn) for fn in next(os.walk(inputDirectory))[2]]
 preProcess(paths)
+'''
 
 fileHashInputDirectory = ODprinseq
 fileHash = {}
@@ -150,3 +152,4 @@ for key in fileHash:
         moduleSpadesPE(inputfileOne, inputfileTwo)
         moduleAbyssPE(inputfileOne, inputfileTwo)
         moduleEdenaPE(inputfileOne, inputfileTwo)
+

@@ -4,14 +4,15 @@ __author__ = 'sungshine'
 
 import os
 
-inputDirectory = "/Users/sungshine/Test/"
-paths = [os.path.join(inputDirectory,fn) for fn in next(os.walk(inputDirectory))[2]]
+inputDirectory = "/data/reads/" #raw reads
+ODprinseq = "/home/sim8/assemblyMagicResults/prinseq/"
+prinseqPaths = [os.path.join(ODprinseq,fn) for fn in next(os.walk(ODprinseq))[2]]
 
 fileHash = {}
 
-def wranglePairedEnds(paths):
+def wranglePairedEnds(prinseqPaths):
 
-    for file in paths:
+    for file in prinseqPaths:
         newfile = ""
 
         if "R1" in file:
@@ -25,9 +26,8 @@ def wranglePairedEnds(paths):
 
         else:
             fileHash[newfile].append(file)
-
     return
 
-wranglePairedEnds(paths)
+wranglePairedEnds(prinseqPaths)
 
 print fileHash

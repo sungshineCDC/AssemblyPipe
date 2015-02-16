@@ -3,10 +3,14 @@ __author__ = 'sungshine'
 #assemblyMagic Pipeline
 
 import os
-import sys
 import subprocess
 import re
-import getopt
+# import getopt, sys
+
+#Takes STDIN for variables inputDirectory & outputDirectory, and creates the outputDirectory.
+def makeOutDirectory(outputDirectory):
+    if not os.path.exists(outputDirectory):
+        os.makedirs(outputDirectory)
 
 #Generates a hashmap of 'key : value' pairs.
 def wranglePairedEnds(paths):
@@ -22,18 +26,15 @@ def wranglePairedEnds(paths):
             fileHash[newfile].append(file)
     return
 
-#Takes STDIN for variables inputDirectory & outputDirectory, and creates the outputDirectory.
-def makeOutDirectory(outputDirectory):
-    if not os.path.exists(outputDirectory):
-        os.makedirs(outputDirectory)
-
 #Invokes fastqc on raw read files passing in the files in as an argument.
-def moduleFastQC(file, outputDirectory):
-    subprocess.call(['fastqc', "-o", outputDirectory, file,])
+def moduleFastQC(file):
+    subprocess.call(['fastqc', "-o", ODfastqc, file,])
 
 #Invokes prinseq-lite on raw read files using default settings passing files in as argument.
 def modulePrinseq(file):
-    subprocess.call(['prinseq-lite', '-verbose', '-fastq',file,'-out_format','3', '-out_good', outputDirectory, '-out_bad', ouputDirectory,])
+    base = os.path.basename(file)
+    filename = os.path.splitext(base)[0]
+    subprocess.call(['prinseq-lite', '-verbose', '-fastq', file, '-out_format','3', '-out_good', ODprinseq+filename+".prinseq", "-out_bad", ODerrors+filename+".bad.prinseq",])
 
 #Preprocess module, sets up directories and
 def preProcess(paths):
@@ -45,12 +46,12 @@ def preProcess(paths):
 def moduleSpadesSE(inputfileOne):
     base = os.path.basename(inputfileOne)
     filename = os.path.splitext(base)[0]
-    subprocess.call(["spades.py", "--careful", "-s", inputfileOne, "-o", outputDirectory+filename+".spades",])
+    subprocess.call(["spades.py", "--careful", "-s", inputfileOne, "-o", ODspades+filename+".spades",])
 
 def moduleSpadesPE(inputfileOne, inputfileTwo):
     base = os.path.basename(inputfileOne)
     filename = os.path.splitext(base)[0]
-    subprocess.call(["spades.py", "--careful", "-1", inputfileOne, "-2", inputfileTwo, "-o", outputDirectory+filename".spades",])
+    subprocess.call(["spades.py", "--careful", "-1", inputfileOne, "-2", inputfileTwo, "-o", ODspades+filename+".spades",])
 
 #abyss single-end read function
 def moduleAbyssSE(inputfileOne):
@@ -69,25 +70,28 @@ def moduleAbyssPE(inputfileOne, inputfileTwo):
 ###                                                   MAIN PROGRAM                                                   ###
 ########################################################################################################################
 
-inputDirectory = '' #/home/biol8803b/data
-outputDirectory = ''   #/home/biol8803b/assemblyMagicResults/preProcessed
-
 #parse command line options
-try:
-    opts, args = getopt.getopt(argv, "hi:o:")
-except getopt.GetoptError:
-    print 'usage: ./assemblyMagic.py -i <Raw reads Directory> -o <output Directory>\n'
-    sys.exit()
-for opt, arg in opts:
-    if opt == '-h':
-        print 'usage: ./assemblyMagic.py -i <Raw reads Directory> -o <output Directory>\n'
-        sys.exit()
-    elif opt in ('-i'):
-        inputDirectory = arg
-    elif opt in ('-o'):
-        outputDirectory = arg
+# try:
+#     opts, args = getopt.getopt(argv, "hi:o:")
+# except getopt.GetoptError():
+#     print 'usage: ./assemblyMagic.py -i <Raw reads Directory> -o <output Directory>\n'
+#     sys.exit()
+# for opt, arg in opts:
+#     if opt == '-h':
+#         print 'usage: ./assemblyMagic.py -i <Raw reads Directory> -o <output Directory>\n'
+#         sys.exit()
+#     elif opt in ('-i'):
+#         inputDirectory = arg
+#     elif opt in ('-o'):
+#         outputDirectory = arg
+
+inputDirectory = "/data/reads/"
+outputDirectory = "/home/biol8803b/assemblyMagicResults/"
 
 #Output directories for respective assembler
+ODerrors = "/home/sim8/assemblyMagicResults/errors/"
+ODprinseq = "home/sim8/assemblyMagicResults/prinseq/"
+ODfastqc = "/home/sim8/assemblyMagicResults/fastqc/"
 ODspades = "/home/sim8/assemblyMagicResults/spades/"
 ODabyss = "/home/sim8/assemblyMagicResults/abyss/"
 ODedena = "/home/sim8/assemblyMagicResults/edena/"
@@ -97,31 +101,32 @@ inputfileOne = ""
 inputfileTwo = ""
 
 paths = [os.path.join(inputDirectory,fn) for fn in next(os.walk(inputDirectory))[2]]
-
-fileHash = {}
-assemblyHash ={}
-
-prinseqPaths = [os.path.join(outputDirectory,fn) for fn in next(os.walk(outputDirectory))[2]]
-
 preProcess(paths)
 
+fileHashInputDirectory = ODprinseq
+fileHash = {}
+
+prinseqPaths = [os.path.join(fileHashInputDirectory,fn) for fn in next(os.walk(fileHashInputDirectory))[2]]
+
 wranglePairedEnds(prinseqPaths)
+print fileHash
 
 for key in fileHash:
 
     currentValue = fileHash.get(key)
-    
+    sortedValue = sorted(currentValue)
+
     #call assemblers to execute single-end read
-    if len(currentValue) == 1:
-        inputfileOne = currentValue[0]
+    if len(sortedValue) == 1:
+        inputfileOne = sortedValue[0]
         
         moduleSpadesSE(inputfileOne)
-        moduleAbyssSE(inputfileone)
+        moduleAbyssSE(inputfileOne)
     
     #execute paired-end reads
-    if len(currentValue) == 2:
-        inputfileOne = currentValue[0]
-        inputfileTwo = currentValue[1]
+    if len(sortedValue) == 2:
+        inputfileOne = sortedValue[0]
+        inputfileTwo = sortedValue[1]
         
         moduleSpadesPE(inputfileOne, inputfileTwo)
         moduleAbyssPE(inputfileOne, inputfileTwo)

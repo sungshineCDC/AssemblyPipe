@@ -10,7 +10,7 @@ inputDirectory = sys.argv[1]    #/home/biol8803b/tmp
 outputDirectory = sys.argv[2]   #/home/biol8803b/fastQCresults
 paths = [os.path.join(inputDirectory,fn) for fn in next(os.walk(inputDirectory))[2]]
 
-def moduleFastQC(file, outputDirectory):
-    subprocess.call(['fastqc', "-o", outputDirectory, file,])
+def moduleFastQC(file):
+    subprocess.call(['fastqc', "-o", ODfastqc, file,])
 
 # moduleFastQC(file, outputDirectory)

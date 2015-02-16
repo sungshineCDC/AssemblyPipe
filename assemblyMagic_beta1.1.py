@@ -34,6 +34,16 @@ def preProcess(paths):
         moduleFastQC(file)
         modulePrinseq(file)
 
+def moduleSpadesSE(inputfileOne):
+    base = os.path.basename(inputfileOne)
+    filename = os.path.splitext(base)[0]
+    subprocess.call(["spades.py", "--careful", "-s", inputfileOne, "-o", ODspades+filename+".spades",])
+
+def moduleSpadesPE(inputfileOne, inputfileTwo):
+    base = os.path.basename(inputfileOne)
+    filename = os.path.splitext(base)[0]
+    subprocess.call(["spades.py", "--careful", "-1", inputfileOne, "-2", inputfileTwo, "-o", ODspades+filename+".spades",])
+
 ########################################################################################################################
 ###                                                   MAIN PROGRAM                                                   ###
 ########################################################################################################################
@@ -44,6 +54,7 @@ outputDirectory = "/home/sim8/assemblyMagicResults/"
 ODerrors = "/home/sim8/assemblyMagicResults/errors/"
 ODprinseq = "/home/sim8/assemblyMagicResults/prinseq/"
 ODfastqc = "/home/sim8/assemblyMagicResults/fastQCresults/"
+ODspades = "/home/sim8/assemblyMagicResults/spades/"
 
 prinseqHash = "/home/sim8/assemblyMagicResults/prinseq/"
 fileHash = {}
@@ -56,8 +67,19 @@ prinseqPaths = [os.path.join(prinseqHash,fn) for fn in next(os.walk(prinseqHash)
 
 wranglePairedEnds(prinseqPaths)
 
-for file in prinseqPaths:
-    print file
+inputfileOne = ""
+inputfileTwo = ""
 
-for key, value in mydic.iteritems() :
-    print key, value
+for key in fileHash:
+
+    hashValues = fileHash.get(key)
+    sortedValues = sorted(hashValues)
+
+    if len(sortedValues) == 1:
+        inputfileOne = sortedValues[0]
+        moduleSpadesSE(inputfileOne)
+
+    if len(sortedValues) == 2:
+        inputfileOne = sortedValues[0]
+        inputfileTwo = sortedValues[1]
+        moduleSpadesPE(inputfileOne, inputfileTwo)

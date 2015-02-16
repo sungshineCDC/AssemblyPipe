@@ -86,7 +86,7 @@ def moduleAbyssPE(inputfileOne, inputfileTwo):
 #         outputDirectory = arg
 
 inputDirectory = "/data/reads/"
-outputDirectory = "/home/biol8803b/assemblyMagicResults/"
+outputDirectory = "/home/sim8/assemblyMagicResults/"
 
 #Output directories for respective assembler
 ODerrors = "/home/sim8/assemblyMagicResults/errors/"

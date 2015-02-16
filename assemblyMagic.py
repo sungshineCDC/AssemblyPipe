@@ -103,7 +103,7 @@ inputfileTwo = ""
 paths = [os.path.join(inputDirectory,fn) for fn in next(os.walk(inputDirectory))[2]]
 preProcess(paths)
 
-fileHashInputDirectory = ODprinseq
+fileHashInputDirectory = str(ODprinseq)
 fileHash = {}
 
 prinseqPaths = [os.path.join(fileHashInputDirectory,fn) for fn in next(os.walk(fileHashInputDirectory))[2]]

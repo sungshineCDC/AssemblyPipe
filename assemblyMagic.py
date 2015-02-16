@@ -55,15 +55,33 @@ def moduleSpadesPE(inputfileOne, inputfileTwo):
 
 #abyss single-end read function
 def moduleAbyssSE(inputfileOne):
-	base = re.match("^(.*)_", inputfileOne)
-	filename = base.group(1)
-	subprocess.call(["ABYSS", "-k 21", inputDirectory + file, "-o", ODabyss + filename + ".fa"])
+    base = re.match("^(.*)_", inputfileOne)
+    filename = base.group(1)
+    subprocess.call(["ABYSS", "-k 21", inputDirectory + file, "-o", ODabyss + filename + ".fa"])
 
 #abyss paired-end read function (not sure if output directory is working atm)
 def moduleAbyssPE(inputfileOne, inputfileTwo):
-	base = re.match("^(.*)_", inputfileOne)
-	filename = base.group(1)
-	subprocess.call(["abyss-pe"], "k=21", "name=", ODabyss + filename + ".fa", "in=", inputDirectory + inputfileone, inputDirectory + inputfiletwo]
+    base = re.match("^(.*)_", inputfileOne)
+    filename = base.group(1)
+    subprocess.call(["abyss-pe"], "k=21", "name=", ODabyss + filename + ".fa", "in=", inputDirectory + inputfileone, inputDirectory + inputfiletwo)
+    
+#edena single-end read function
+def moduleEdenaSE(inputfileOne):
+    base = os.path.basename(inputfileOne)
+    filename = os.path.splitext(base)[0]
+    fileOutputDirectory = outputDirectory+str(filename)
+    subprocess.call(["mkdir", fileOutputDirectory])
+    subprocess.call(["edena", "-r", inputfileOne, "-p", fileOutputDirectory+"/out"])
+    subprocess.call(["edena", "-e", fileOutputDirectory+"/out.ovl", "-p", fileOutputDirectory+"/"])
+
+#edena paired-end read function (might encounter error for some strands)
+def moduleEdenaPE(inputfileone, inputfiletwo):
+    base = os.path.basename(inputfileone)
+    filename = os.path.splitext(base)[0]
+    fileOutputDirectory = outputDirectory+str(filename)
+    subprocess.call(["mkdir", fileOutputDirectory])
+    subprocess.call(["edena", "-DRpairs", inputfileone, inputfiletwo, "-p", fileOutputDirectory+"/out"])
+    subprocess.call(["edena", "-e", fileOutputDirectory+"/out.ovl", "-p", fileOutputDirectory+"/"])
 
 
 ########################################################################################################################
@@ -122,6 +140,7 @@ for key in fileHash:
         
         moduleSpadesSE(inputfileOne)
         moduleAbyssSE(inputfileOne)
+        moduleEdenaSE(inputfileOne)
     
     #execute paired-end reads
     if len(sortedValue) == 2:
@@ -130,3 +149,4 @@ for key in fileHash:
         
         moduleSpadesPE(inputfileOne, inputfileTwo)
         moduleAbyssPE(inputfileOne, inputfileTwo)
+        moduleEdenaPE(inputfileOne, inputfileTwo)

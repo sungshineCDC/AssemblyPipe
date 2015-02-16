@@ -6,6 +6,7 @@ import os
 import sys
 import subprocess
 import re
+import getopt
 
 #Generates a hashmap of 'key : value' pairs.
 def wranglePairedEnds(paths):
@@ -91,16 +92,19 @@ ODspades = "/home/sim8/assemblyMagicResults/spades/"
 ODabyss = "/home/sim8/assemblyMagicResults/abyss/"
 ODedena = "/home/sim8/assemblyMagicResults/edena/"
 ODcisa = "/home/sim8/assemblyMagicResults/cisa/"
+
 inputfileOne = ""
 inputfileTwo = ""
+
 paths = [os.path.join(inputDirectory,fn) for fn in next(os.walk(inputDirectory))[2]]
-prinseqPaths = [os.path.join(outputDirectory,fn) for fn in next(os.walk(outputDirectory))[2]]
 
 fileHash = {}
 assemblyHash ={}
 
-makeOutDirectory(outputDirectory)
+prinseqPaths = [os.path.join(outputDirectory,fn) for fn in next(os.walk(outputDirectory))[2]]
+
 preProcess(paths)
+
 wranglePairedEnds(prinseqPaths)
 
 for key in fileHash:

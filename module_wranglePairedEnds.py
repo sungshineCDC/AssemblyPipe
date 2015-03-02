@@ -1,4 +1,4 @@
-__author__ = 'sungshine'
+__author__ = 'Sung Im'
 #!/usr/bin/env python
 import os
 

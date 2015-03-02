@@ -1,11 +1,11 @@
-__author__ = 'sungshine'
+__author__ = 'Sung Im'
 #!/usr/bin/python3
-#assemblyMagic Pipeline
-
 import os
 import subprocess
 import re
 # import getopt, sys
+
+#assemblyMagic Pipeline
 
 #Takes STDIN for variables inputDirectory & outputDirectory, and creates the outputDirectory.
 def makeOutDirectory(outputDirectory):

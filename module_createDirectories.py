@@ -4,8 +4,6 @@ import os
 import sys
 import subprocess
 
-
-
 outputDirectory = sys.argv[1]
 
 def module_createDirectories(outputDirectory):

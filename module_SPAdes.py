@@ -1,6 +1,5 @@
-__author__ = 'sungshine'
-#!/usr/bin/python3
-
+__author__ = 'Sung Im'
+#!/usr/bin/env python
 import os
 import subprocess
 

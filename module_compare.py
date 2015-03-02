@@ -1,5 +1,5 @@
 __author__ = 'mcdy143'
-#!/usr/bin/python3
+#!/usr/bin/env python
 import csv
 from math import log
 

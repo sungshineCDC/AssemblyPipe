@@ -1,5 +1,5 @@
 __author__ = 'sungshine'
-#!/usr/bin/python3
+#!/usr/bin/env python
 #Invokes fastqc on raw read files passing in the files in as an argument
 
 import os

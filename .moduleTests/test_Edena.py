@@ -1,5 +1,5 @@
-__author__ = 'mcdy143, sungshine, xin-w, anujg1911'
-#!/usr/bin/python3
+__author__ = 'mcdy143, sungshine'
+#!/usr/bin/env python
 
 import os
 import subprocess
@@ -21,29 +21,6 @@ def wranglePairedEnds(prinseqPaths):
             print "already in newfile --", newfile
             fileHash[newfile].append(file)
     return
-
-def moduleFastQC(file):
-    subprocess.call(['fastqc', "-o", ODfastqc, file,])
-
-def modulePrinseq(file):
-    base = os.path.basename(file)
-    filename = os.path.splitext(base)[0]
-    subprocess.call(['prinseq-lite', '-verbose', '-fastq', file, '-out_format','3', '-out_good', ODprinseq+filename+".prinseq", "-out_bad", ODerrors+filename+".bad.prinseq",])
-
-def preProcess(paths):
-    for file in paths:
-        moduleFastQC(file)
-        modulePrinseq(file)
-
-def moduleSpadesSE(inputfileOne):
-    base = os.path.basename(inputfileOne)
-    filename = os.path.splitext(base)[0]
-    subprocess.call(["spades.py", "--careful", "-s", inputfileOne, "-o", ODspades+filename+".spades",])
-
-def moduleSpadesPE(inputfileOne, inputfileTwo):
-    base = os.path.basename(inputfileOne)
-    filename = os.path.splitext(base)[0]
-    subprocess.call(["spades.py", "--careful", "-1", inputfileOne, "-2", inputfileTwo, "-o", ODspades+filename+".spades",])
 
 def moduleedenaSE(inputfileOne):
     base = os.path.basename(inputfileOne)
@@ -70,13 +47,12 @@ ODerrors = "/home/sim8/assemblyMagicResults/errors/"
 ODprinseq = "/home/sim8/assemblyMagicResults/prinseq/"
 ODfastqc = "/home/sim8/assemblyMagicResults/fastQCresults/"
 ODedena = "/home/sim8/assemblyMagicResults/edena/"
-ODspades = "/home/sim8/assemblyMagicResults/spades/"
 
 fileHash = {}
 
 paths = [os.path.join(inputDirectory,fn) for fn in next(os.walk(inputDirectory))[2]]
 
-preProcess(paths)
+# preProcess(paths)
 
 prinseqPaths = [os.path.join(ODprinseq,fn) for fn in next(os.walk(ODprinseq))[2]]
 
@@ -92,15 +68,10 @@ for key in fileHash:
 
     if len(sortedValues) == 1:
         inputfileOne = sortedValues[0]
-
-        moduleSpadesSE(inputfileOne)
         moduleedenaSE(inputfileOne)
 
     if len(sortedValues) == 2:
         inputfileOne = sortedValues[0]
         inputfileTwo = sortedValues[1]
-
-        moduleSpadesPE(inputfileOne, inputfileTwo)
         moduleedenaPE(inputfileOne, inputfileTwo)
 
-#Code works here

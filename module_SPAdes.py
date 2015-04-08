@@ -1,23 +1,17 @@
-__author__ = 'sungshine'
-#!/usr/bin/python3
-
+__author__ = 'Sung Im'
+#!/usr/bin/env python
 import os
 import subprocess
 
 def wranglePairedEnds(prinseqPaths):
-
     for file in prinseqPaths:
         newfile = ""
-
         if "R1" in file:
             newfile = file.replace("R1", "R*")
-
         elif "R2" in file:
             newfile = file.replace("R2", "R*")
-
         if not newfile in fileHash:
             fileHash[newfile] = [file]
-
         else:
             fileHash[newfile].append(file)
     return
